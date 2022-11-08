@@ -53,6 +53,7 @@ export default function Application() {
       </section>
       <section className="schedule">
         {schedule}
+        <Appointment time="5pm" />
       </section>
     </main>
   );

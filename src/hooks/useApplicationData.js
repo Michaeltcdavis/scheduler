@@ -11,24 +11,61 @@ export default function useApplicationData() {
 
   const setDay = day => setState({ ...state, day });
 
-  
+  function countSpots(day) {
+    const appointArray = day.appointments;
+    console.log('appointArray', appointArray);
+    let count = 0;
+    for (let appoint of appointArray) {
+      console.log(state.appointments[appoint]);
+      if (!state.appointments[appoint].interview)
+        count++;
+    }
+    return count;
+  }
+
+  function findDayOfAppointment(appointId) {
+    for (let day of state.days) {
+      console.log(day);
+      console.log(appointId)
+      if (day.appointments.includes(appointId)) {
+        console.log('dayObj: ', day);
+        return { ...day };
+      }
+    }
+    return -1;
+  }
 
   function bookInterview(id, interview) {
-    //console.log('bookInterview Params: ', id, interview);
     return axios.put(`/api/appointments/${id}`, { interview })
       .then((res) => {
+        const appointmentDay = findDayOfAppointment(id);
+        const spots = countSpots(appointmentDay);
+        const days = state.days.map((day) => {
+          if (day.id === appointmentDay.id) {
+            day.spots = spots - 1;
+          }
+          return day;
+        })
         const appointment = { ...state.appointments[id], interview: { ...interview } };
         const appointments = { ...state.appointments, [id]: appointment };
-        return setState(prev => ({ ...prev, appointments }));
+        return setState(prev => ({ ...prev, appointments, days }));
       });
   }
 
   function cancelInterview(id) {
     return axios.delete(`/api/appointments/${id}`)
       .then((res) => {
+        const appointmentDay = findDayOfAppointment(id);
+        const spots = countSpots(appointmentDay);
+        const days = state.days.map((day) => {
+          if (day.id === appointmentDay.id) {
+            day.spots = spots+1;
+          }
+          return day;
+        })
         const appointment = { ...state.appointments[id], interview: null }
         const appointments = { ...state.appointments, [id]: appointment }
-        setState(prev => ({ ...prev, appointments }))
+        setState(prev => ({ ...prev, appointments, days }))
       })
   }
 
