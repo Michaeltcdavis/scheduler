@@ -26,8 +26,7 @@ export default function Application() {
         const appointment = { ...state.appointments[id], interview: { ...interview } };
         const appointments = { ...state.appointments, [id]: appointment };
         return setState(prev => ({ ...prev, appointments }));
-      })
-      .catch((e) => console.log('bookInterview error: ', e.message));
+      });
   }
 
   function cancelInterview(id) {
@@ -37,7 +36,6 @@ export default function Application() {
         const appointments = {...state.appointments, [id]: appointment}
         setState(prev => ({...prev, appointments}))
       })
-      .catch(e => console.log('cancelInterview Err: ', e.message))
   }
 
   const schedule = appointments.map((appointment) => {
