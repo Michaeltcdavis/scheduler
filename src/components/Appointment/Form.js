@@ -6,10 +6,10 @@ import Button from 'components/Button';
 
 
 export default function Form(props) {
-  console.log('props: ', props.interviewer, props.student);
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer ? props.interviewer.id : null);
   const [error, setError] = useState("");
+
   const reset = function() {
     setStudent("");
     setInterviewer(null);
@@ -17,6 +17,7 @@ export default function Form(props) {
 
   const cancel = function() {
     reset();
+    setError("");
     props.onCancel();
   }
 
