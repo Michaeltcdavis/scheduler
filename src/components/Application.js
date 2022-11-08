@@ -17,6 +17,29 @@ export default function Application() {
   });
 
   const appointments = getAppointmentsForDay(state, state.day);
+
+
+  function bookInterview(id, interview) {
+    //console.log('bookInterview Params: ', id, interview);
+    return axios.put(`/api/appointments/${id}`, { interview })
+      .then((res) => {
+        const appointment = { ...state.appointments[id], interview: { ...interview } };
+        const appointments = { ...state.appointments, [id]: appointment };
+        return setState(prev => ({ ...prev, appointments }));
+      })
+      .catch((e) => console.log('bookInterview error: ', e.message));
+  }
+
+  function cancelInterview(id) {
+    return axios.delete(`/api/appointments/${id}`)
+      .then((res) => {
+        const appointment = {...state.appointments[id], interview: null }
+        const appointments = {...state.appointments, [id]: appointment}
+        setState(prev => ({...prev, appointments}))
+      })
+      .catch(e => console.log('cancelInterview Err: ', e.message))
+  }
+
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
     const interviewers = getInterviewersForDay(state, state.day);
@@ -26,9 +49,10 @@ export default function Application() {
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
-        student={appointment.student}
         interview={interview}
         interviewers={interviewers}
+        bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     )
   });
@@ -44,7 +68,7 @@ export default function Application() {
       setState((prev) => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
     });
     return () => ignore = true;
-  }, []); 
+  }, []);
 
   return (
     <main className="layout">
