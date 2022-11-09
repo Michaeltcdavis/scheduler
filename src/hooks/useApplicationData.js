@@ -11,24 +11,9 @@ export default function useApplicationData() {
 
   const setDay = day => setState({ ...state, day });
 
-  function countSpots(day) {
-    const appointArray = day.appointments;
-    console.log('appointArray', appointArray);
-    let count = 0;
-    for (let appoint of appointArray) {
-      console.log(state.appointments[appoint]);
-      if (!state.appointments[appoint].interview)
-        count++;
-    }
-    return count;
-  }
-
   function findDayOfAppointment(appointId) {
     for (let day of state.days) {
-      console.log(day);
-      console.log(appointId)
       if (day.appointments.includes(appointId)) {
-        console.log('dayObj: ', day);
         return { ...day };
       }
     }
@@ -39,9 +24,10 @@ export default function useApplicationData() {
     return axios.put(`/api/appointments/${id}`, { interview })
       .then((res) => {
         const appointmentDay = findDayOfAppointment(id);
-        const spots = countSpots(appointmentDay);
+        const spots = appointmentDay.spots;
+        const isNewInterview = state.appointments[id].interview ? false : true;
         const days = state.days.map((day) => {
-          if (day.id === appointmentDay.id) {
+          if (day.id === appointmentDay.id && isNewInterview) {
             day.spots = spots - 1;
           }
           return day;
@@ -54,15 +40,15 @@ export default function useApplicationData() {
 
   function cancelInterview(id) {
     return axios.delete(`/api/appointments/${id}`)
-      .then((res) => {
-        const appointmentDay = findDayOfAppointment(id);
-        const spots = countSpots(appointmentDay);
-        const days = state.days.map((day) => {
-          if (day.id === appointmentDay.id) {
-            day.spots = spots+1;
-          }
-          return day;
-        })
+    .then((res) => {
+      const appointmentDay = findDayOfAppointment(id);
+      const spots = appointmentDay.spots;
+      const days = state.days.map((day) => {
+        if (day.id === appointmentDay.id) {
+          day.spots = spots+1;
+        }
+        return day;
+      })
         const appointment = { ...state.appointments[id], interview: null }
         const appointments = { ...state.appointments, [id]: appointment }
         setState(prev => ({ ...prev, appointments, days }))

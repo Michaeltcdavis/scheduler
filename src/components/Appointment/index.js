@@ -30,11 +30,10 @@ export default function Appointment(props) {
     };
     props.bookInterview(props.id, interview)
       .then(() => {
-        console.log('promise returned');
         transition(SHOW);
       })
       .catch(e => {
-        console.log('bookInterview error: ', e.message);
+        //console.log('bookInterview error: ', e.message);
         transition(ERROR_SAVE, true);
       });
   }
@@ -44,13 +43,13 @@ export default function Appointment(props) {
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(e => {
-        console.log('cancel error, ', e.message);
+        //console.log('cancel error, ', e.message);
         transition(ERROR_DELETE, true);
       });
   }
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <header>{props.time}</header>
       {mode === SHOW &&
         <Show
@@ -66,7 +65,6 @@ export default function Appointment(props) {
         <Form
         interviewers={props.interviewers}
         onSave={save}
-        //onCancel={back}
         />}
       
       {mode === SAVING && <Status message='Saving' />}
