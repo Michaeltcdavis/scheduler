@@ -51,6 +51,7 @@ export default function Appointment(props) {
   return (
     <article className="appointment" data-testid="appointment">
       <header>{props.time}</header>
+
       {mode === SHOW &&
         <Show
         interviewer={props.interview.interviewer}
@@ -88,9 +89,17 @@ export default function Appointment(props) {
         onCancel={back}
         />}
       
-      {mode === ERROR_SAVE && <Error message='There was an error saving your appointment' onClose={back} />}
+      {mode === ERROR_SAVE &&
+        <Error
+          message='There was an error saving your appointment'
+          onClose={back}
+        />}
 
-      {mode === ERROR_DELETE && <Error message='There was an error deleting your appointment' onClose={back} />}
+      {mode === ERROR_DELETE &&
+        <Error
+          message='There was an error deleting your appointment'
+          onClose={back}
+        />}
       
     </article>
       );
