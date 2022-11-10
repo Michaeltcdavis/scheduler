@@ -65,6 +65,7 @@ export default function Appointment(props) {
         <Form
         interviewers={props.interviewers}
         onSave={save}
+        onCancel={() => transition(EMPTY)}
         />}
       
       {mode === SAVING && <Status message='Saving' />}
