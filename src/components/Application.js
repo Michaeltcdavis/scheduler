@@ -39,7 +39,6 @@ export default function Application() {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu" >
           <DayList
-            key={state.day}
             days={state.days}
             value={state.day}
             onChange={setDay}
