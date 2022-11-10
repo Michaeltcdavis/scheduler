@@ -6,16 +6,26 @@ The website is built with React components and uses custom hooks to separate fun
 
 The website was tested using Storybook for unit tests, jest for integration tests and Cypress for end-to-end tests.
 
+A mock axios file was used to test how the site responds to axios call errors, so the user experience is not interrupted.
+
 ## Final Product
 
 ### Navigation
 
 !["navigation"](/public/images/navigation.gif?raw=true "navigation")
 
+### Add an Appointment
+
+!["adding appointment"](/public/images/adding-appointment?raw=true "adding appointment")
+
+### Delete an Appointment
+
+!["deleting appointment"](/public/images/delete-appointment.gif?raw=true "deleting appointment")
+
 ### Edit an Appointment
 
+!["editing appointment"](/public/images/edit-appointment.gif?raw=true "editing appointment")
 
-### 
 
 ## Setup
 
